@@ -1,7 +1,7 @@
 ﻿namespace DI_Play.Services
 {
-    internal class SingletonService : ISingletonService
+    internal class SingletonService : BaseService, ISingletonService
     {
-        public string GetMessage() => "Singletons rule!";
+        public override string GetMessage() => "From Singleton, " + base.GetMessage();
     }
 }

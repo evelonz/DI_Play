@@ -1,7 +1,6 @@
 ﻿namespace DI_Play.Services
 {
-    public interface ISingletonService
+    public interface ISingletonService : IBaseService
     {
-        string GetMessage();
     }
 }

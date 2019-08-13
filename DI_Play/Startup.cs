@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using DI_Play.Services;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -26,6 +27,13 @@ namespace DI_Play
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            // https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-2.2
+            // Created ones each time it is requested.
+            services.AddTransient<ITransientService, TransientService>();
+            // Created ones per client request.
+            services.AddScoped<IScopedService, ScopedService>();
+            // Created ones for the lifespan of the application (created on first request).
+            services.AddSingleton<ISingletonService, SingletonService>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
