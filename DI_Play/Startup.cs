@@ -1,4 +1,5 @@
-﻿using DI_Play.Services;
+﻿using DI_Play.Configuration;
+using DI_Play.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -26,6 +27,12 @@ namespace DI_Play
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
+
+            // Example loading settings into a class that can be dependency injected into other classes.
+            // in this example it is done without a interface, so it will inject only where the class is needed.
+            var config = new ServiceConfiguration();
+            Configuration.Bind("ServiceConfiguration", config);
+            services.AddSingleton(config);
 
             // https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-2.2
             // Created ones each time it is requested.

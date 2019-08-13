@@ -1,7 +1,16 @@
-﻿namespace DI_Play.Services
+﻿using DI_Play.Configuration;
+
+namespace DI_Play.Services
 {
     internal class ScopedService : BaseService, IScopedService
     {
-        public override string GetMessage() => "From Scoped, " + base.GetMessage();
+        private readonly ServiceConfiguration _config;
+
+        public override string GetMessage() => _config.MessagePrefix + " From Scoped, " + base.GetMessage();
+
+        public ScopedService(ServiceConfiguration config)
+        {
+            _config = config;
+        }
     }
 }
