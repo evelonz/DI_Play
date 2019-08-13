@@ -1,5 +1,5 @@
-﻿using DI_Play.Configuration;
-using DI_Play.Services;
+﻿using DI_Play_Lib.Configuration;
+using DI_Play_Lib.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;

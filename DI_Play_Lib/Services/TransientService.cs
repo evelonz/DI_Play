@@ -1,6 +1,6 @@
-﻿namespace DI_Play.Services
+﻿namespace DI_Play_Lib.Services
 {
-    internal class TransientService : BaseService, ITransientService
+    public class TransientService : BaseService, ITransientService
     {
         public override string GetMessage() => "From Transient, " + base.GetMessage();
     }

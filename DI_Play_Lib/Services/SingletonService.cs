@@ -1,6 +1,6 @@
-﻿namespace DI_Play.Services
+﻿namespace DI_Play_Lib.Services
 {
-    internal class SingletonService : BaseService, ISingletonService
+    public class SingletonService : BaseService, ISingletonService
     {
         public override string GetMessage() => "From Singleton, " + base.GetMessage();
     }

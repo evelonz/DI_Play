@@ -1,8 +1,8 @@
-﻿using DI_Play.Configuration;
+﻿using DI_Play_Lib.Configuration;
 
-namespace DI_Play.Services
+namespace DI_Play_Lib.Services
 {
-    internal class ScopedService : BaseService, IScopedService
+    public class ScopedService : BaseService, IScopedService
     {
         private readonly ServiceConfiguration _config;
 

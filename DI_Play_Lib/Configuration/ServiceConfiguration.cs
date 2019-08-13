@@ -1,4 +1,4 @@
-﻿namespace DI_Play.Configuration
+﻿namespace DI_Play_Lib.Configuration
 {
     public class ServiceConfiguration
     {

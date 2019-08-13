@@ -1,6 +1,6 @@
-﻿namespace DI_Play.Services
+﻿namespace DI_Play_Lib.Services
 {
-    internal class BaseService : IBaseService
+    public class BaseService : IBaseService
     {
         private readonly System.Guid MyGuid;
 

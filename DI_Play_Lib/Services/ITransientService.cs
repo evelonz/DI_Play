@@ -1,4 +1,4 @@
-﻿namespace DI_Play.Services
+﻿namespace DI_Play_Lib.Services
 {
     public interface ITransientService : IBaseService
     {
