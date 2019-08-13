@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DI_Play", "DI_Play\DI_Play.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DI_Play_Lib", "DI_Play_Lib\DI_Play_Lib.csproj", "{398EFB62-3AF9-44A7-B27F-57AA139D94F7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DI_Play_Console", "DI_Play_Console\DI_Play_Console.csproj", "{E8D0C3C6-2C08-420F-9DE0-5EE2857C1BF3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{398EFB62-3AF9-44A7-B27F-57AA139D94F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{398EFB62-3AF9-44A7-B27F-57AA139D94F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{398EFB62-3AF9-44A7-B27F-57AA139D94F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8D0C3C6-2C08-420F-9DE0-5EE2857C1BF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8D0C3C6-2C08-420F-9DE0-5EE2857C1BF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8D0C3C6-2C08-420F-9DE0-5EE2857C1BF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8D0C3C6-2C08-420F-9DE0-5EE2857C1BF3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
