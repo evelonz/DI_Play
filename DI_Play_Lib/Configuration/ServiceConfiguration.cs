@@ -2,6 +2,6 @@
 {
     public class ServiceConfiguration
     {
-        public string MessagePrefix { get; set; } = "NotSet";
+        public string MessagePrefix { get; set; } = "Config not set.";
     }
 }
