@@ -1,4 +1,5 @@
-﻿using DI_Play_Lib.Configuration;
+﻿using System;
+using DI_Play_Lib.Configuration;
 using DI_Play_Lib.Extensions;
 using DI_Play_Lib.Services;
 using DI_Play_Lib.Services.InternalySetUpServices;
@@ -21,16 +22,16 @@ namespace DI_Play_Console
                 .AddDIPlayService()
                 .BuildServiceProvider();
 
-            System.Console.WriteLine("Test of added library service:");
+            Console.WriteLine("Test of added library service:");
             var diPlayService = (ISimpleLibService)serviceProvider.GetService(typeof(ISimpleLibService));
-            System.Console.WriteLine(diPlayService.GetMessage() + System.Environment.NewLine);
+            Console.WriteLine(diPlayService.GetMessage() + Environment.NewLine);
 
             while (true)
             {
                 UserServices(serviceProvider);
 
-                System.Console.WriteLine("Press q to exit. Press any other key to run again.");
-                var key = System.Console.ReadKey();
+                Console.WriteLine("Press q to exit. Press any other key to run again.");
+                var key = Console.ReadKey();
                 if (key.KeyChar == 'q') break;
             }
 
@@ -47,12 +48,12 @@ namespace DI_Play_Console
             var singleton2 = (ISingletonService)serviceProvider.GetService(typeof(ISingletonService));
 
             // Call retrived services.
-            System.Console.WriteLine(transientService.GetMessage());
-            System.Console.WriteLine(transient2.GetMessage());
-            System.Console.WriteLine(scopedService.GetMessage());
-            System.Console.WriteLine(scoped2.GetMessage());
-            System.Console.WriteLine(singletonService.GetMessage());
-            System.Console.WriteLine(singleton2.GetMessage());
+            Console.WriteLine(transientService.GetMessage());
+            Console.WriteLine(transient2.GetMessage());
+            Console.WriteLine(scopedService.GetMessage());
+            Console.WriteLine(scoped2.GetMessage());
+            Console.WriteLine(singletonService.GetMessage());
+            Console.WriteLine(singleton2.GetMessage());
         }
     }
 }
