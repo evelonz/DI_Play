@@ -1,5 +1,7 @@
 ﻿using DI_Play_Lib.Configuration;
+using DI_Play_Lib.Extensions;
 using DI_Play_Lib.Services;
+using DI_Play_Lib.Services.InternalySetUpServices;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DI_Play_Console
@@ -16,7 +18,12 @@ namespace DI_Play_Console
                 .AddSingleton(new ServiceConfiguration())
                 .AddScoped<IScopedService, ScopedService>()
                 .AddSingleton<ISingletonService, SingletonService>()
+                .AddDIPlayService()
                 .BuildServiceProvider();
+
+            System.Console.WriteLine("Test of added library service:");
+            var diPlayService = (ISimpleLibService)serviceProvider.GetService(typeof(ISimpleLibService));
+            System.Console.WriteLine(diPlayService.GetMessage() + System.Environment.NewLine);
 
             while (true)
             {
