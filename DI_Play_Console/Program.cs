@@ -116,14 +116,21 @@ namespace DI_Play_Console
             CallServiceSimple<ITransientService>(serviceProvider);
             CallServiceSimple<ITransientService>(serviceProvider);
 
-            CallServiceSimple<IScopedService>(serviceProvider);
-            CallServiceSimple<IScopedService>(serviceProvider);
+            using(var serviceScope = serviceProvider.CreateScope())
+            {
+                CallServiceSimple<IScopedService>(serviceScope.ServiceProvider);
+                CallServiceSimple<IScopedService>(serviceScope.ServiceProvider);
+            }
+            using (var serviceScope = serviceProvider.CreateScope())
+            {
+                CallServiceSimple<IScopedService>(serviceScope.ServiceProvider);
+            }
 
             CallServiceSimple<ISingletonService>(serviceProvider);
             CallServiceSimple<ISingletonService>(serviceProvider);
         }
 
-        private static void CallServiceSimple<T>(ServiceProvider serviceProvider) where T : IBaseService
+        private static void CallServiceSimple<T>(IServiceProvider serviceProvider) where T : IBaseService
         {
             var service = (T)serviceProvider.GetService(typeof(T));
             Console.WriteLine(service.GetMessage());
