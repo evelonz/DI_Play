@@ -31,6 +31,7 @@ namespace DI_Play_Console
                 Console.WriteLine("1: Test Service Scopes");
                 Console.WriteLine("2: Test Library Service");
                 Console.WriteLine("3/4: Test Library Service with {lib/app} config");
+                Console.WriteLine("5: Test Multiple Services On Single Interface");
 
                 var testKey = Console.ReadKey().KeyChar;
                 Console.WriteLine("");
@@ -47,6 +48,9 @@ namespace DI_Play_Console
                         break;
                     case '4':
                         TestOverridingLibraryService(serviceCollection, true);
+                        break;
+                    case '5':
+                        TestMultipleServicesOnSingleInterface(serviceProvider);
                         break;
                     default:
                         Console.WriteLine("Incorrect option selected!");
@@ -87,7 +91,7 @@ namespace DI_Play_Console
         private static void CallServiceDetailed<T>(ServiceProvider serviceProvider) where T : IBaseService
         {
             Console.WriteLine($"Test call to service of type {typeof(T).Name}.");
-            var service = (T)serviceProvider.GetService(typeof(T));
+            var service = serviceProvider.GetService<T>();
             Console.WriteLine($"Got implementation {service.GetType().Name}.");
             Console.WriteLine(service.GetMessage() + Environment.NewLine);
         }
@@ -134,6 +138,27 @@ namespace DI_Play_Console
         {
             var service = (T)serviceProvider.GetService(typeof(T));
             Console.WriteLine(service.GetMessage());
+        }
+
+        /// <summary>
+        /// Gets an IEnumerable of registered services on a single interface.
+        /// It seems that the default when a single service on the interface is requested is
+        /// that the last registered implementation is returned.
+        /// </summary>
+        private static void TestMultipleServicesOnSingleInterface(ServiceProvider serviceProvider)
+        {
+            CallIEnumerableServiceDetailed<IMultipleServices>(serviceProvider);
+        }
+
+        private static void CallIEnumerableServiceDetailed<T>(ServiceProvider serviceProvider) where T : IBaseService
+        {
+            Console.WriteLine($"Test call to service of type {typeof(T).Name}.");
+            var services = serviceProvider.GetServices<T>();
+            foreach (var service in services)
+            {
+                Console.WriteLine($"Got implementation {service.GetType().Name}.");
+                Console.WriteLine(service.GetMessage() + Environment.NewLine);
+            }
         }
     }
 }

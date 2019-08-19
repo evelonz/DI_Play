@@ -10,7 +10,9 @@ namespace DI_Play_Lib.Extensions
         {
             services.AddScoped<ISimpleLibService, SimpleLibService>();
             services.AddSingleton<IInternalServiceConfiguration, InternalServiceConfiguration>();
-            services.AddScoped<IConfigurableLibService, ConfigurableLibService>();
+            services.AddSingleton<IConfigurableLibService, ConfigurableLibService>();
+            services.AddSingleton<IMultipleServices, MultipleServicesOne>();
+            services.AddSingleton<IMultipleServices, MultipleServicesTwo>();
             return services;
         }
     }
