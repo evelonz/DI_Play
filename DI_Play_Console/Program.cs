@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Linq;
+using DI_Play_Console.Services;
 using DI_Play_Lib.Configuration;
 using DI_Play_Lib.Extensions;
 using DI_Play_Lib.Services;
-using DI_Play_Lib.Services.InternalySetUpServices;
-using DI_Play_Lib.Services.InternalySetUpServices.BuildableService;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DI_Play_Console
@@ -41,25 +39,25 @@ namespace DI_Play_Console
                 switch (testKey)
                 {
                     case '1':
-                        TestServiceScopes(serviceProvider);
+                        TestBasicDI.ServiceScopes(serviceProvider);
                         break;
                     case '2':
-                        TestLibraryService(serviceProvider);
+                        TestLibraryService.Simple(serviceProvider);
                         break;
                     case '3':
-                        TestOverridingLibraryService(serviceCollection, false);
+                        TestLibraryService.OverridingLibraryServiceConfig(serviceCollection, false);
                         break;
                     case '4':
-                        TestOverridingLibraryService(serviceCollection, true);
+                        TestLibraryService.OverridingLibraryServiceConfig(serviceCollection, true);
                         break;
                     case '5':
-                        TestMultipleServicesOnSingleInterface(serviceProvider);
+                        TestBasicDI.MultipleServicesOnSingleInterface(serviceProvider);
                         break;
                     case '6':
-                        TestBuildableServiceUsingBuilder(serviceCollection);
+                        TestBuildableServices.UsingBuilder(serviceCollection);
                         break;
                     case '7':
-                        TestBuildableServiceUsingAction(serviceCollection);
+                        TestBuildableServices.UsingAction(serviceCollection);
                         break;
                     default:
                         Console.WriteLine("Incorrect option selected!");
@@ -71,134 +69,6 @@ namespace DI_Play_Console
             }
 
         }
-        
-        private static void TestLibraryService(ServiceProvider serviceProvider)
-        {
-            CallServiceDetailed<ISimpleLibService>(serviceProvider);
-        }
 
-        private static void TestOverridingLibraryService(IServiceCollection services, bool useAppConfig)
-        {
-            RemoveService<IInternalServiceConfiguration>(services);
-
-            // This is only supposed to be done during setup. We do it here at run time merely as an example of how to do it.
-            if (useAppConfig)
-                services.AddSingleton<IInternalServiceConfiguration, AppConfig>();
-            else
-                services.AddSingleton<IInternalServiceConfiguration, InternalServiceConfiguration>();
-
-            var serviceProvider = services.BuildServiceProvider();
-
-            CallServiceDetailed<IConfigurableLibService>(serviceProvider);
-        }
-
-        public class AppConfig : IInternalServiceConfiguration
-        {
-            public string MessagePrefix => "App config!";
-        }
-
-        private static void CallServiceDetailed<T>(ServiceProvider serviceProvider) where T : IBaseService
-        {
-            Console.WriteLine($"Test call to service of type {typeof(T).Name}.");
-            var service = serviceProvider.GetService<T>();
-            Console.WriteLine($"Got implementation {service.GetType().Name}.");
-            Console.WriteLine(service.GetMessage() + Environment.NewLine);
-        }
-
-        private static void RemoveService<T>(IServiceCollection services)
-        {
-            var libconfig = services.FirstOrDefault(descriptor => descriptor.ServiceType == typeof(T));
-            services.Remove(libconfig);
-        }
-
-        private static void TestBuildableServiceUsingBuilder(IServiceCollection services)
-        {
-            var builder = services.AddBuildableService();
-            builder.RemovePrefixMessage();
-
-            var provider = services.BuildServiceProvider();
-            CallServiceSimple<IBuildableService>(provider);
-
-            builder.AddPrefixMessage("Test With Prefix. ");
-            provider = services.BuildServiceProvider();
-            CallServiceSimple<IBuildableService>(provider);
-        }
-
-        private static void TestBuildableServiceUsingAction(IServiceCollection services)
-        {
-            RemoveService<IBuildableService>(services);
-            services.AddBuildableService((config) => {
-                config.RemovePrefixMessage();
-            });
-            var provider = services.BuildServiceProvider();
-            CallServiceSimple<IBuildableService>(provider);
-
-            RemoveService<IBuildableService>(services);
-            services.AddBuildableService((config) => {
-                config.AddPrefixMessage("Test with new Prefix. ");
-            });
-
-            provider = services.BuildServiceProvider();
-            CallServiceSimple<IBuildableService>(provider);
-        }
-
-        private static void TestServiceScopes(ServiceProvider serviceProvider)
-        {
-            while (true)
-            {
-                UserServices(serviceProvider);
-
-                Console.WriteLine("Press any other key to run again and see which services gets a new instance. Press q to exit.");
-                var key = Console.ReadKey();
-                Console.WriteLine("");
-                if (key.KeyChar == 'q') break;
-            }
-        }
-
-        private static void UserServices(ServiceProvider serviceProvider)
-        {
-            CallServiceSimple<ITransientService>(serviceProvider);
-            CallServiceSimple<ITransientService>(serviceProvider);
-
-            using(var serviceScope = serviceProvider.CreateScope())
-            {
-                CallServiceSimple<IScopedService>(serviceScope.ServiceProvider);
-                CallServiceSimple<IScopedService>(serviceScope.ServiceProvider);
-            }
-            using (var serviceScope = serviceProvider.CreateScope())
-            {
-                CallServiceSimple<IScopedService>(serviceScope.ServiceProvider);
-            }
-
-            CallServiceSimple<ISingletonService>(serviceProvider);
-            CallServiceSimple<ISingletonService>(serviceProvider);
-        }
-
-        private static void CallServiceSimple<T>(IServiceProvider serviceProvider) where T : IBaseService
-        {
-            var service = (T)serviceProvider.GetService(typeof(T));
-            Console.WriteLine(service.GetMessage());
-        }
-
-        /// <summary>
-        /// Gets an IEnumerable of registered services on a single interface.
-        /// It seems that the default when a single service on the interface is requested is
-        /// that the last registered implementation is returned.
-        /// </summary>
-        private static void TestMultipleServicesOnSingleInterface(ServiceProvider serviceProvider)
-        {
-            CallIEnumerableServiceDetailed<IMultipleServices>(serviceProvider);
-        }
-
-        private static void CallIEnumerableServiceDetailed<T>(ServiceProvider serviceProvider) where T : IBaseService
-        {
-            Console.WriteLine($"Test call to service of type {typeof(T).Name}.");
-            var services = serviceProvider.GetServices<T>();
-            foreach (var service in services)
-            {
-                Console.WriteLine($"Got implementation {service.GetType().Name}.");
-                Console.WriteLine(service.GetMessage() + Environment.NewLine);
-            }
-        }
     }
 }
