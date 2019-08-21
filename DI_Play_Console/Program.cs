@@ -4,6 +4,7 @@ using DI_Play_Lib.Configuration;
 using DI_Play_Lib.Extensions;
 using DI_Play_Lib.Services;
 using DI_Play_Lib.Services.InternalySetUpServices;
+using DI_Play_Lib.Services.InternalySetUpServices.BuildableService;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DI_Play_Console
@@ -32,6 +33,8 @@ namespace DI_Play_Console
                 Console.WriteLine("2: Test Library Service");
                 Console.WriteLine("3/4: Test Library Service with {lib/app} config");
                 Console.WriteLine("5: Test Multiple Services On Single Interface");
+                Console.WriteLine("6: Test Buildable Service Using Builder");
+                Console.WriteLine("7: Test Buildable Service Using Action");
 
                 var testKey = Console.ReadKey().KeyChar;
                 Console.WriteLine("");
@@ -52,6 +55,12 @@ namespace DI_Play_Console
                     case '5':
                         TestMultipleServicesOnSingleInterface(serviceProvider);
                         break;
+                    case '6':
+                        TestBuildableServiceUsingBuilder(serviceCollection);
+                        break;
+                    case '7':
+                        TestBuildableServiceUsingAction(serviceCollection);
+                        break;
                     default:
                         Console.WriteLine("Incorrect option selected!");
                         break;
@@ -62,7 +71,7 @@ namespace DI_Play_Console
             }
 
         }
-
+        
         private static void TestLibraryService(ServiceProvider serviceProvider)
         {
             CallServiceDetailed<ISimpleLibService>(serviceProvider);
@@ -100,6 +109,37 @@ namespace DI_Play_Console
         {
             var libconfig = services.FirstOrDefault(descriptor => descriptor.ServiceType == typeof(T));
             services.Remove(libconfig);
+        }
+
+        private static void TestBuildableServiceUsingBuilder(IServiceCollection services)
+        {
+            var builder = services.AddBuildableService();
+            builder.RemovePrefixMessage();
+
+            var provider = services.BuildServiceProvider();
+            CallServiceSimple<IBuildableService>(provider);
+
+            builder.AddPrefixMessage("Test With Prefix. ");
+            provider = services.BuildServiceProvider();
+            CallServiceSimple<IBuildableService>(provider);
+        }
+
+        private static void TestBuildableServiceUsingAction(IServiceCollection services)
+        {
+            RemoveService<IBuildableService>(services);
+            services.AddBuildableService((config) => {
+                config.RemovePrefixMessage();
+            });
+            var provider = services.BuildServiceProvider();
+            CallServiceSimple<IBuildableService>(provider);
+
+            RemoveService<IBuildableService>(services);
+            services.AddBuildableService((config) => {
+                config.AddPrefixMessage("Test with new Prefix. ");
+            });
+
+            provider = services.BuildServiceProvider();
+            CallServiceSimple<IBuildableService>(provider);
         }
 
         private static void TestServiceScopes(ServiceProvider serviceProvider)
