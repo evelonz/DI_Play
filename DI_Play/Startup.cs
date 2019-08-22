@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+//using Microsoft.Extensions.Logging;
 
 namespace DI_Play
 {
@@ -27,6 +28,9 @@ namespace DI_Play
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
+
+            // Requires `Microsoft.Extensions.Logging`. Also added in `Main`.
+            //services.AddLogging((builder) => { builder.AddConsole(); });
 
             // Example loading settings into a class that can be dependency injected into other classes.
             // in this example it is done without a interface, so it will inject only where the class is needed.
