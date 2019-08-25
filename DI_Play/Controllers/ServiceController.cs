@@ -1,4 +1,5 @@
-﻿using DI_Play_Lib.Services;
+﻿using DI_Play.Middleware;
+using DI_Play_Lib.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
 
@@ -10,22 +11,31 @@ namespace DI_Play.Controllers
         private readonly IScopedService _scopedService;
         private readonly ISingletonService _singletonService;
         private readonly IServiceProvider _serviceProvider;
+        private readonly IMyScopedServiceFactory _myScopedServiceFactory;
 
         public ServiceController(
             ITransientService transientService,
             IScopedService scopedService,
             ISingletonService singletonService,
-            IServiceProvider serviceProvider)
+            IServiceProvider serviceProvider,
+            IMyScopedServiceFactory myScopedServiceFactory)
         {
             _transientService = transientService;
             _scopedService = scopedService;
             _singletonService = singletonService;
             _serviceProvider = serviceProvider;
+            _myScopedServiceFactory = myScopedServiceFactory;
         }
 
         public IActionResult Index()
         {
             return View();
+        }
+
+        public IActionResult Test()
+        {
+            var msg = _myScopedServiceFactory.Service.ScopedMesssage;
+            return Content(msg);
         }
 
         public IActionResult GetServiceData()
