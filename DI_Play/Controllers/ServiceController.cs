@@ -1,4 +1,5 @@
-﻿using DI_Play_Lib.Services;
+﻿using DI_Play.Middleware;
+using DI_Play_Lib.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
 
@@ -10,17 +11,20 @@ namespace DI_Play.Controllers
         private readonly IScopedService _scopedService;
         private readonly ISingletonService _singletonService;
         private readonly IServiceProvider _serviceProvider;
+        private readonly IScopedCustomRequestContextProvider _scopedCustomRequestContextProvider;
 
         public ServiceController(
             ITransientService transientService,
             IScopedService scopedService,
             ISingletonService singletonService,
-            IServiceProvider serviceProvider)
+            IServiceProvider serviceProvider,
+            IScopedCustomRequestContextProvider scopedCustomRequestContextProvider)
         {
             _transientService = transientService;
             _scopedService = scopedService;
             _singletonService = singletonService;
             _serviceProvider = serviceProvider;
+            _scopedCustomRequestContextProvider = scopedCustomRequestContextProvider;
         }
 
         public IActionResult Index()
@@ -43,6 +47,12 @@ namespace DI_Play.Controllers
                 Sing1 = _singletonService.GetMessage(),
                 Sing2 = singleton2.GetMessage(),
             });
+        }
+
+        public IActionResult TestICustomRequestContext()
+        {
+            var service = _scopedCustomRequestContextProvider.Service;
+            return Content(service.ScopedMesssage);
         }
     }
 }

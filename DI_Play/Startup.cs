@@ -1,4 +1,5 @@
-﻿using DI_Play_Lib.Configuration;
+﻿using DI_Play.Middleware;
+using DI_Play_Lib.Configuration;
 using DI_Play_Lib.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -46,6 +47,8 @@ namespace DI_Play
             // Created ones for the lifespan of the application (created on first request).
             services.AddSingleton<ISingletonService, SingletonService>();
 
+            services.AddScoped<IScopedCustomRequestContextProvider, MyScopedCustomRequestProvider>();
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
@@ -66,6 +69,8 @@ namespace DI_Play
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
+
+            app.UseMiddleware<CustomRequestMiddleware>();
 
             app.UseMvc(routes =>
             {
